@@ -28,14 +28,13 @@ import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
 import org.everit.osgi.ecm.annotation.Deactivate;
 import org.everit.osgi.ecm.annotation.ManualService;
+import org.everit.osgi.ecm.annotation.ManualServices;
 import org.everit.osgi.ecm.annotation.attribute.StringAttribute;
 import org.everit.osgi.ecm.annotation.attribute.StringAttributes;
 import org.everit.osgi.ecm.component.ComponentContext;
-import org.everit.osgi.ecm.extender.ECMExtenderConstants;
+import org.everit.osgi.ecm.extender.ExtendComponent;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
-
-import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
  * ECM component for {@link NoOpConcurrentMap}.
@@ -45,10 +44,10 @@ import aQute.bnd.annotation.headers.ProvideCapability;
  * @param <V>
  *          the type of mapped values
  */
+@ExtendComponent
 @Component(componentId = NoOpCacheConstants.SERVICE_FACTORYPID,
-    configurationPolicy = ConfigurationPolicy.IGNORE, label = "Everit NoOp Cache")
-@ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
-    value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
+    configurationPolicy = ConfigurationPolicy.IGNORE, label = "Everit NoOp Cache",
+    description = "A simple Map registered as an OSGi service that does nothing.")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
         defaultValue = NoOpCacheConstants.DEFAULT_SERVICE_DESCRIPTION,
@@ -59,7 +58,7 @@ import aQute.bnd.annotation.headers.ProvideCapability;
         defaultValue = NoOpCacheConstants.CACHE_DRIVER_NAME,
         priority = NoOpCacheComponent.P2_CACHE_DRIVER_NAME, label = "Cache driver name",
         description = "The name of the cache driver.") })
-@ManualService({ Map.class, ConcurrentMap.class })
+@ManualServices(@ManualService({ Map.class, ConcurrentMap.class }))
 public class NoOpCacheComponent<K, V> {
 
   public static final int P1_SERVICE_DESCRIPTION = 1;
@@ -72,7 +71,7 @@ public class NoOpCacheComponent<K, V> {
    * Component activator method.
    */
   @Activate
-  public void activate(final ComponentContext<NoOpCacheComponent> componentContext) {
+  public void activate(final ComponentContext<NoOpCacheComponent<?, ?>> componentContext) {
     Dictionary<String, Object> serviceProperties =
         new Hashtable<>(componentContext.getProperties());
 

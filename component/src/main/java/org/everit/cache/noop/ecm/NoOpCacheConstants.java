@@ -26,6 +26,7 @@ public final class NoOpCacheConstants {
 
   public static final String DEFAULT_SERVICE_DESCRIPTION = "No-operation cache";
 
+  @SuppressWarnings("rawtypes")
   public static final Class<ConcurrentMap> OBJECT_CLASS_CONCURRENT_MAP = ConcurrentMap.class;
 
   public static final String SERVICE_FACTORYPID = "org.everit.cache.noop.ecm.NoOpCacheComponent";
